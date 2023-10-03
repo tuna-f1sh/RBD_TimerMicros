@@ -1,4 +1,4 @@
-// Arduino RBD Timer Library v1.4.0 - Manage many timed events.
+// Arduino RBD TimerMicros Library v1.0.0 - Manage many timed events.
 // https://github.com/tuna-f1sh/RBD_TimerMicros
 // Copyright (c) 2015 Alex Taujenis - MIT License
 
@@ -6,59 +6,59 @@
 #include <RBD_TimerMicros.h> // https://github.com/tuna-f1sh/RBD_TimerMicros
 
 namespace RBD {
-  Timer::Timer() {}
+  TimerMicros::TimerMicros() {}
 
-  Timer::Timer(unsigned long value) {
+  TimerMicros::TimerMicros(unsigned long value) {
     setTimeout(value);
   }
 
-  void Timer::setTimeout(unsigned long value) {
+  void TimerMicros::setTimeout(unsigned long value) {
     _timeout = (value > 0) ? value : 1;
   }
 
-  unsigned long Timer::getTimeout() {
+  unsigned long TimerMicros::getTimeout() {
     return _timeout;
   }
 
-  void Timer::setHertz(int value) {
+  void TimerMicros::setHertz(int value) {
     _hertz   = constrain(value, 1, 1e6);
     _timeout = (unsigned long)(1e6 / _hertz);
   }
 
-  int Timer::getHertz() {
+  int TimerMicros::getHertz() {
     return _hertz;
   }
 
-  void Timer::restart() {
+  void TimerMicros::restart() {
     _waypoint         = micros();
     _state            = ACTIVE;
     _has_been_active  = false;
     _has_been_expired = false;
   }
 
-  void Timer::stop() {
+  void TimerMicros::stop() {
     _state = STOPPED;
   }
 
-  void Timer::expire() {
+  void TimerMicros::expire() {
     _state = EXPIRED;
   }
 
-  bool Timer::isActive() {
+  bool TimerMicros::isActive() {
     _updateState();
     return _state == ACTIVE;
   }
 
-  bool Timer::isExpired() {
+  bool TimerMicros::isExpired() {
     _updateState();
     return _state == EXPIRED;
   }
 
-  bool Timer::isStopped() {
+  bool TimerMicros::isStopped() {
     return _state == STOPPED;
   }
 
-  bool Timer::onRestart() {
+  bool TimerMicros::onRestart() {
     if(isExpired()) {
       restart();
       return true;
@@ -66,41 +66,41 @@ namespace RBD {
     return false;
   }
 
-  bool Timer::onActive() {
+  bool TimerMicros::onActive() {
     if(!_has_been_active && isActive()) {
       return _has_been_active = true;
     }
     return false;
   }
 
-  bool Timer::onExpired() {
+  bool TimerMicros::onExpired() {
     if(!_has_been_expired && isExpired()) {
       return _has_been_expired = true;
     }
     return false;
   }
 
-  unsigned long Timer::getValue() {
+  unsigned long TimerMicros::getValue() {
     return micros() - _waypoint;
   }
 
-  unsigned long Timer::getInverseValue() {
+  unsigned long TimerMicros::getInverseValue() {
     return _timeout - getValue();
   }
 
-  int Timer::getPercentValue() {
+  int TimerMicros::getPercentValue() {
     if(_timeout == 0) {return 0;}
     return getValue() / float(_timeout) * 100;
   }
 
-  int Timer::getInversePercentValue() {
+  int TimerMicros::getInversePercentValue() {
     return 100 - getPercentValue();
   }
 
 
   // private
 
-  void Timer::_updateState() {
+  void TimerMicros::_updateState() {
     if(_state == ACTIVE && getValue() >= _timeout) {
       _state = EXPIRED;
     }

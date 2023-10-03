@@ -1,17 +1,17 @@
-// Arduino RBD Timer Library v1.4.0 - Manage many timed events.
+// Arduino RBD TimerMicros Library v1.4.0 - Manage many timed events.
 // https://github.com/tuna-f1sh/RBD_TimerMicros
 // Copyright (c) 2015 Alex Taujenis - MIT License
 
-#ifndef RBD_TIMER_H
-#define RBD_TIMER_H
+#ifndef RBD_TIMER_MICROS_H
+#define RBD_TIMER_MICROS_H
 
 #include "Arduino.h"
 
 namespace RBD {
-  class Timer {
+  class TimerMicros {
     public:
-      Timer();                              // constructor with zero timeout, starts in "expired" state by default
-      Timer(unsigned long value);           // overloaded constructor: provide a setTimeout in microseconds, starts in "expired" state by default
+      TimerMicros();                              // constructor with zero timeout, starts in "expired" state by default
+      TimerMicros(unsigned long value);           // overloaded constructor: provide a setTimeout in microseconds, starts in "expired" state by default
       void setTimeout(unsigned long value); // set/change how long the timer will run until it expires in microseconds
       void setHertz(int value);             // set/change how many times onRestart will return true in one second
       void restart();                       // reset and start the timer
