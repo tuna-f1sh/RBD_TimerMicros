@@ -1,8 +1,8 @@
 // Arduino RBD Timer Library v1.4.0 Example - A three second interval timer that prints to serial.
-// https://github.com/alextaujenis/RBD_Timer
+// https://github.com/tuna-f1sh/RBD_TimerMicros
 // Copyright (c) 2015 Alex Taujenis - MIT License
 
-#include <RBD_Timer.h> // https://github.com/alextaujenis/RBD_Timer
+#include <RBD_TimerMicros.h> // https://github.com/tuna-f1sh/RBD_TimerMicros
 
 RBD::Timer timer;
 

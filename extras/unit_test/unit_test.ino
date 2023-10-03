@@ -1,9 +1,9 @@
 // Arduino RBD Timer Library v1.4.0 - Unit test coverage.
-// https://github.com/alextaujenis/RBD_Timer
+// https://github.com/tuna-f1sh/RBD_TimerMicros
 // Copyright (c) 2015 Alex Taujenis - MIT License
 
 #include <ArduinoUnit.h> // https://github.com/mmurdoch/arduinounit
-#include <RBD_Timer.h>   // https://github.com/alextaujenis/RBD_Timer
+#include <RBD_TimerMicros.h>   // https://github.com/tuna-f1sh/RBD_TimerMicros
 
 RBD::Timer timer;
 RBD::Timer timer_untouched;
@@ -16,36 +16,36 @@ RBD::Timer timer_zero;
     assertFalse(timer_untouched.isActive());
   }
 
-  test(constructor_should_set_the_default_timeout_to_zero_milliseconds) {
+  test(constructor_should_set_the_default_timeout_to_zero_microseconds) {
     assertEqual(timer_untouched.getTimeout(), 0);
   }
 
 // overloaded constructor
-  test(overloaded_constructor_should_set_the_timeout_in_milliseconds) {
-    assertEqual(timer_timeout.getTimeout(), 100);
+  test(overloaded_constructor_should_set_the_timeout_in_microseconds) {
+    assertEqual(timer_timeout.getTimeout(), 100e3);
   }
 
 // setTimeout
-  test(setTimeout_should_set_the_timeout_in_milliseconds) {
+  test(setTimeout_should_set_the_timeout_in_microseconds) {
     timer.setTimeout(100);
 
     assertEqual(timer.getTimeout(), 100);
   }
 
-  test(setTimeout_should_set_the_timeout_in_long_milliseconds) {
+  test(setTimeout_should_set_the_timeout_in_long_microseconds) {
     timer.setTimeout(100000L); // trailing 'L' is important for 'long' literal
 
     assertEqual(timer.getTimeout(), 100000L);
   }
 
-  test(setTimeout_should_constrain_the_lower_bounds_to_one_millisecond) {
+  test(setTimeout_should_constrain_the_lower_bounds_to_one_microecond) {
     timer.setTimeout(0);
 
     assertEqual(timer.getTimeout(), 1);
   }
 
 // getTimeout
-  test(getTimeout_should_return_the_timeout_in_milliseconds) {
+  test(getTimeout_should_return_the_timeout_in_microseconds) {
     timer.setTimeout(42);
 
     assertEqual(timer.getTimeout(), 42);
@@ -302,7 +302,7 @@ RBD::Timer timer_zero;
 
 // onExpired
   test(onExpired_should_return_true_after_the_timer_expires) {
-    timer.setTimeout(1);
+    timer.setTimeout(1e3);
     timer.restart();
     delay(1);
 
@@ -310,7 +310,7 @@ RBD::Timer timer_zero;
   }
 
   test(onExpired_should_return_false_the_second_time_after_the_timer_is_restarted) {
-    timer.setTimeout(1);
+    timer.setTimeout(1e3);
     timer.restart();
     delay(1);
     timer.onExpired();
@@ -319,14 +319,14 @@ RBD::Timer timer_zero;
   }
 
   test(onExpired_should_return_false_on_timer_rollover) {
-    timer.setTimeout(1);
+    timer.setTimeout(1e3);
     timer.restart();
     delay(1);
 
     assertTrue(timer.onExpired());
     assertFalse(timer.onExpired());
 
-    timer.setTimeout(5); // make it active again without calling restart, then wait for it to expire: almost like timer rollover
+    timer.setTimeout(5e3); // make it active again without calling restart, then wait for it to expire: almost like timer rollover
     delay(5);
 
     assertFalse(timer.onExpired());
@@ -334,7 +334,7 @@ RBD::Timer timer_zero;
 
 // stop
   test(isActive_and_onActive_should_return_false_after_stop) {
-    timer.setTimeout(1);
+    timer.setTimeout(1e3);
     timer.restart();
     timer.stop();
 
@@ -343,7 +343,7 @@ RBD::Timer timer_zero;
   }
 
   test(isExpired_and_onExpired_should_return_false_after_stop) {
-    timer.setTimeout(1);
+    timer.setTimeout(1e3);
     timer.restart();
     timer.stop();
     delay(1);
@@ -353,7 +353,7 @@ RBD::Timer timer_zero;
   }
 
   test(onRestart_should_return_false_after_stop) {
-    timer.setTimeout(1);
+    timer.setTimeout(1e3);
     timer.restart();
     timer.stop();
     delay(1);
@@ -363,7 +363,7 @@ RBD::Timer timer_zero;
 
 // getValue
   test(getValue_should_return_the_time_passed_since_restart) {
-    timer.setTimeout(5);
+    timer.setTimeout(5e3);
     timer.restart();
     delay(1);
 
@@ -372,7 +372,7 @@ RBD::Timer timer_zero;
 
 // getInverseValue
   test(getInverseValue_should_return_the_time_left_until_timeout) {
-    timer.setTimeout(5);
+    timer.setTimeout(5e3);
     timer.restart();
     delay(2);
 

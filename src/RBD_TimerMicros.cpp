@@ -1,9 +1,9 @@
 // Arduino RBD Timer Library v1.4.0 - Manage many timed events.
-// https://github.com/alextaujenis/RBD_Timer
+// https://github.com/tuna-f1sh/RBD_TimerMicros
 // Copyright (c) 2015 Alex Taujenis - MIT License
 
 #include <Arduino.h>
-#include <RBD_Timer.h> // https://github.com/alextaujenis/RBD_Timer
+#include <RBD_TimerMicros.h> // https://github.com/tuna-f1sh/RBD_TimerMicros
 
 namespace RBD {
   Timer::Timer() {}
@@ -21,9 +21,8 @@ namespace RBD {
   }
 
   void Timer::setHertz(int value) {
-    // possible to do: manage setHertz in micros() for higher resolution
-    _hertz   = constrain(value, 1, 1000);
-    _timeout = (unsigned long)(1000 / _hertz);
+    _hertz   = constrain(value, 1, 1e6);
+    _timeout = (unsigned long)(1e6 / _hertz);
   }
 
   int Timer::getHertz() {
@@ -31,7 +30,7 @@ namespace RBD {
   }
 
   void Timer::restart() {
-    _waypoint         = millis();
+    _waypoint         = micros();
     _state            = ACTIVE;
     _has_been_active  = false;
     _has_been_expired = false;
@@ -82,7 +81,7 @@ namespace RBD {
   }
 
   unsigned long Timer::getValue() {
-    return millis() - _waypoint;
+    return micros() - _waypoint;
   }
 
   unsigned long Timer::getInverseValue() {
